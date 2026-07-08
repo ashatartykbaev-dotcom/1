@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ул. Бухар Жырау, 56/2 — информационный портал дома</title>
+<style>
+  :root{
+    --bg: #F4F6F4;
+    --surface: #FFFFFF;
+    --ink: #1E2B27;
+    --ink-soft: #56655F;
+    --line: #DDE4DF;
+    --door-green: #2F5D50;
+    --door-green-dark: #1C332C;
+    --door-green-light: #4C7C6C;
+    --plate-blue: #1D4E63;
+    --plate-blue-dark: #123544;
+    --stamp-red: #A6392C;
+    --font-head: -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "Consolas", "Menlo", "Courier New", monospace;
+    --font-body: Georgia, "Times New Roman", serif;
+    --radius: 14px;
+    --shadow-soft: 0 8px 24px rgba(28,51,44,0.08), 0 2px 6px rgba(28,51,44,0.06);
+    --shadow-lift: 0 16px 40px rgba(28,51,44,0.14), 0 4px 10px rgba(28,51,44,0.08);
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--font-body);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  img,svg{ display:block; max-width:100%; }
+  a{ color:inherit; text-decoration:none; }
+  ul{ list-style:none; }
+  button{ font:inherit; cursor:pointer; border:none; background:none; color:inherit; }
+  section{ padding:88px 24px; max-width:1180px; margin:0 auto; }
+  .eyebrow{
+    font-family:var(--font-mono);
+    text-transform:uppercase;
+    letter-spacing:.14em;
+    font-size:12.5px;
+    color:var(--door-green);
+    font-weight:600;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:18px; height:2px;
+    background:var(--stamp-red);
+  }
+  h2{
+    font-family:var(--font-head);
+    font-size:clamp(26px,3.6vw,38px);
+    font-weight:800;
+    letter-spacing:-0.01em;
+    color:var(--door-green-dark);
+    margin-bottom:8px;
+  }
+  .section-sub{
+    color:var(--ink-soft);
+    font-size:16px;
+    max-width:640px;
+    margin-bottom:44px;
+  }
+  .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .6s ease, transform .6s ease;
+  }
+  .reveal.is-visible{ opacity:1; transform:none; }
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed; top:0; left:0; right:0; z-index:1000;
+    background:rgba(244,246,244,0.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-wrap{
+    max-width:1180px; margin:0 auto; padding:14px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .brand{
+    font-family:var(--font-mono);
+    font-weight:700;
+    letter-spacing:.02em;
+    font-size:15px;
+    color:var(--door-green-dark);
+    display:flex; align-items:center; gap:10px;
+  }
+  .brand-mark{
+    min-width:30px; height:30px; padding:0 7px; border-radius:6px;
+    background:linear-gradient(160deg, var(--plate-blue), var(--plate-blue-dark));
+    display:flex; align-items:center; justify-content:center;
+    color:#DCEFEA; font-size:12px; font-weight:800;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+    font-family:var(--font-mono);
+  }
+  nav ul{ display:flex; gap:26px; }
+  nav a{
+    font-family:var(--font-head);
+    font-size:14.5px; font-weight:600;
+    color:var(--ink-soft);
+    transition:color .2s ease;
+  }
+  nav a:hover, nav a:focus-visible{ color:var(--door-green-dark); }
+  .burger{
+    display:none; flex-direction:column; gap:5px; width:26px;
+  }
+  .burger span{
+    height:2px; background:var(--door-green-dark); border-radius:2px; transition:.25s ease;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding-top:150px;
+    background:
+      radial-gradient(1200px 500px at 85% -10%, rgba(76,124,108,0.35), transparent 60%),
+      linear-gradient(175deg, var(--door-green-dark), var(--door-green) 60%, #38695A);
+    color:#EAF3EF;
+    position:relative;
+    overflow:hidden;
+  }
+  .hero::after{
+    content:"";
+    position:absolute; inset:0;
+    background-image: repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0px, rgba(255,255,255,0.03) 1px, transparent 1px, transparent 4px);
+    pointer-events:none;
+  }
+  .hero-grid{
+    position:relative; z-index:1;
+    display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px;
+    align-items:center;
+    padding-bottom:64px;
+  }
+  .hero-copy .eyebrow{ color:#BFE0D3; }
+  .hero-copy .eyebrow::before{ background:#E9A48C; }
+  .hero-copy h1{
+    font-family:var(--font-head);
+    font-size:clamp(30px,4.4vw,46px);
+    line-height:1.12;
+    font-weight:800;
+    letter-spacing:-0.015em;
+    margin-bottom:18px;
+  }
+  .hero-copy p{
+    color:#CFE3DA; font-size:16.5px; max-width:480px; margin-bottom:28px;
+  }
+  .hero-actions{ display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    font-family:var(--font-head);
+    font-weight:700; font-size:14.5px;
+    padding:13px 22px; border-radius:10px;
+    transition:transform .18s ease, box-shadow .18s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{
+    background:#EAF3EF; color:var(--door-green-dark);
+    box-shadow:var(--shadow-soft);
+  }
+  .btn-primary:hover{ transform:translateY(-2px); box-shadow:var(--shadow-lift); }
+  .btn-ghost{
+    border:1px solid rgba(234,243,239,0.35); color:#EAF3EF;
+  }
+  .btn-ghost:hover{ background:rgba(234,243,239,0.1); }
+
+  /* nameplate signature element */
+  .plate-wrap{ position:relative; display:flex; justify-content:center; }
+  .nameplate{
+    width:100%; max-width:380px;
+    background:linear-gradient(160deg, #2C6D89, var(--plate-blue) 55%, var(--plate-blue-dark));
+    border-radius:10px;
+    padding:26px 24px 22px;
+    box-shadow: 0 2px 0 rgba(255,255,255,0.25) inset, 0 -3px 10px rgba(0,0,0,0.25) inset, var(--shadow-lift);
+    position:relative;
+    transform:rotate(-1.2deg);
+  }
+  .nameplate::before{
+    content:"";
+    position:absolute; top:10px; left:10px; right:10px; bottom:10px;
+    border:1px solid rgba(255,255,255,0.22);
+    border-radius:6px;
+    pointer-events:none;
+  }
+  .nameplate .plate-eyebrow{
+    font-family:var(--font-mono); font-size:11px; letter-spacing:.22em;
+    color:#9FD2E0; text-transform:uppercase; margin-bottom:10px;
+  }
+  .nameplate .plate-address{
+    font-family:var(--font-mono);
+    font-size:clamp(20px,2.6vw,26px);
+    font-weight:700; letter-spacing:.01em;
+    color:#F2FBFF;
+    text-shadow:0 1px 0 rgba(0,0,0,0.35);
+  }
+  .plate-divider{
+    height:1px; background:rgba(255,255,255,0.2); margin:16px 0;
+  }
+  .plate-stats{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+  }
+  .plate-stat{
+    background:rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.16);
+    border-radius:7px;
+    padding:9px 6px;
+    text-align:center;
+  }
+  .plate-stat b{
+    display:block; font-family:var(--font-mono); font-size:19px; color:#F2FBFF;
+  }
+  .plate-stat span{
+    display:block; font-size:10.5px; color:#B9DCE6; letter-spacing:.03em; margin-top:2px;
+  }
+  .stamp{
+    position:absolute; right:-14px; bottom:-30px; width:112px; height:112px;
+  }
+  @media (max-width:720px){ .stamp{ right:auto; left:50%; transform:translateX(-40%); bottom:-46px; } }
+
+  /* ---------- QUICK FACTS (intercom panel style) ---------- */
+  .facts-panel{
+    margin-top:-46px; position:relative; z-index:2;
+  }
+  .facts-card{
+    background:var(--surface);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow-lift);
+    padding:26px;
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+  }
+  .facts-card .btn-tile{
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:16px 10px;
+    text-align:center;
+    transition:transform .15s ease, border-color .15s ease;
+  }
+  .facts-card .btn-tile:hover{ transform:translateY(-3px); border-color:var(--door-green-light); }
+  .btn-tile .icon-num{
+    font-family:var(--font-mono); font-weight:700; font-size:22px; color:var(--door-green-dark);
+  }
+  .btn-tile label{
+    display:block; font-family:var(--font-head); font-size:11.5px; color:var(--ink-soft);
+    margin-top:5px; letter-spacing:.01em;
+  }
+
+  /* ---------- INFO CARDS ---------- */
+  .info-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+  }
+  .card{
+    background:var(--surface); border-radius:var(--radius);
+    padding:26px; box-shadow:var(--shadow-soft);
+    border-left:3px solid var(--door-green);
+  }
+  .card h3{
+    font-family:var(--font-head); font-size:16px; font-weight:700;
+    color:var(--door-green-dark); margin-bottom:8px;
+  }
+  .card p{ font-size:14.5px; color:var(--ink-soft); }
+  .card .big{
+    font-family:var(--font-mono); font-size:28px; font-weight:700; color:var(--ink);
+    margin-bottom:6px;
+  }
+  .readiness-card{ border-left-color:var(--stamp-red); grid-column:span 3; display:flex; gap:24px; align-items:center; flex-wrap:wrap;}
+  .readiness-badge{
+    width:74px; height:74px; border-radius:50%;
+    border:3px solid var(--stamp-red);
+    display:flex; align-items:center; justify-content:center;
+    color:var(--stamp-red); font-size:28px; flex-shrink:0;
+  }
+  .readiness-text b{ color:var(--door-green-dark); }
+
+  /* ---------- GALLERY ---------- */
+  .gallery-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:18px;
+  }
+  .gallery-item{
+    border-radius:var(--radius); overflow:hidden; position:relative;
+    aspect-ratio:4/3; cursor:pointer; box-shadow:var(--shadow-soft);
+    transition:transform .2s ease, box-shadow .2s ease;
+  }
+  .gallery-item:hover{ transform:translateY(-4px); box-shadow:var(--shadow-lift); }
+  .gallery-item .gcap{
+    position:absolute; left:0; right:0; bottom:0;
+    padding:12px 14px; font-family:var(--font-head); font-weight:700; font-size:14px;
+    color:#fff; background:linear-gradient(to top, rgba(0,0,0,0.55), transparent);
+  }
+  .gallery-item .gsvg{ position:absolute; inset:0; width:100%; height:100%; }
+
+  /* ---------- INFRASTRUCTURE ---------- */
+  .infra-grid{ display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+  .infra-item{
+    background:var(--surface); border-radius:12px; padding:16px 18px;
+    display:flex; align-items:center; gap:14px; box-shadow:var(--shadow-soft);
+  }
+  .infra-icon{
+    width:40px; height:40px; border-radius:9px; flex-shrink:0;
+    background:#E9F1EC; color:var(--door-green); display:flex; align-items:center; justify-content:center;
+  }
+  .infra-item h4{ font-family:var(--font-head); font-size:14.5px; font-weight:700; }
+  .infra-item span{ font-family:var(--font-mono); font-size:12.5px; color:var(--ink-soft); }
+
+  /* ---------- DOCUMENTS ---------- */
+  .doc-list{ display:flex; flex-direction:column; gap:12px; }
+  .doc-item{
+    background:var(--surface); border-radius:12px; padding:16px 20px;
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    box-shadow:var(--shadow-soft); flex-wrap:wrap;
+  }
+  .doc-left{ display:flex; align-items:center; gap:14px; }
+  .doc-icon{
+    width:38px; height:38px; border-radius:8px; background:#EAF1FB; color:var(--plate-blue);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .doc-title{ font-family:var(--font-head); font-weight:700; font-size:14.5px; }
+  .doc-meta{ font-family:var(--font-mono); font-size:12px; color:var(--ink-soft); }
+  .doc-tag{
+    font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    background:var(--bg); border:1px solid var(--line); padding:4px 9px; border-radius:20px; color:var(--ink-soft);
+  }
+  .doc-link{ font-family:var(--font-head); font-weight:700; font-size:13.5px; color:var(--door-green-dark); white-space:nowrap; }
+  .doc-link:hover{ text-decoration:underline; }
+
+  /* ---------- MANAGEMENT ---------- */
+  .mgmt-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .mgmt-card{ background:var(--surface); border-radius:var(--radius); padding:26px; box-shadow:var(--shadow-soft); }
+  .avatar{
+    width:52px; height:52px; border-radius:50%;
+    background:linear-gradient(160deg, var(--door-green-light), var(--door-green-dark));
+    color:#fff; font-family:var(--font-head); font-weight:700; font-size:17px;
+    display:flex; align-items:center; justify-content:center; margin-bottom:14px;
+  }
+  .mgmt-card h3{ font-family:var(--font-head); font-size:16px; font-weight:800; }
+  .mgmt-role{ font-family:var(--font-mono); font-size:11.5px; color:var(--door-green); text-transform:uppercase; letter-spacing:.06em; margin-bottom:12px; display:block; }
+  .mgmt-row{ font-size:14px; color:var(--ink-soft); margin-top:6px; }
+  .mgmt-row b{ color:var(--ink); }
+
+  /* ---------- PHONES ---------- */
+  .phones-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .phone-tile{
+    background:var(--door-green-dark); color:#EAF3EF; border-radius:12px; padding:18px 18px;
+    display:flex; flex-direction:column; gap:6px; transition:transform .15s ease;
+  }
+  .phone-tile:hover{ transform:translateY(-3px); }
+  .phone-tile.urgent{ background:var(--stamp-red); }
+  .phone-tile .plabel{ font-family:var(--font-head); font-weight:700; font-size:13.5px; }
+  .phone-tile .pnum{ font-family:var(--font-mono); font-size:19px; letter-spacing:.02em; }
+
+  /* ---------- NEWS ---------- */
+  .news-list{ display:flex; flex-direction:column; }
+  .news-item{
+    display:grid; grid-template-columns:110px 1px 1fr; gap:22px;
+    padding:22px 0; border-bottom:1px solid var(--line);
+  }
+  .news-item:first-child{ padding-top:0; }
+  .news-date{ font-family:var(--font-mono); font-size:13px; color:var(--ink-soft); padding-top:2px; }
+  .news-line{ background:var(--line); }
+  .news-item h4{ font-family:var(--font-head); font-size:16.5px; font-weight:700; margin-bottom:6px; color:var(--door-green-dark); }
+  .news-item p{ font-size:14.5px; color:var(--ink-soft); }
+
+  /* ---------- MAP ---------- */
+  .map-wrap{
+    background:var(--surface); border-radius:var(--radius); box-shadow:var(--shadow-soft);
+    padding:24px; display:grid; grid-template-columns:1.3fr 1fr; gap:24px; align-items:center;
+  }
+  .map-svg-wrap{ border-radius:10px; overflow:hidden; border:1px solid var(--line); }
+  .map-legend{ display:flex; flex-direction:column; gap:12px; }
+  .legend-row{ display:flex; align-items:center; gap:10px; font-size:14px; color:var(--ink-soft); }
+  .legend-dot{ width:12px; height:12px; border-radius:50%; flex-shrink:0; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--door-green-dark); color:#CFE3DA; padding:56px 24px 30px;
+  }
+  .footer-inner{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:2fr 1fr 1fr; gap:36px; }
+  .footer-inner h4{ font-family:var(--font-head); color:#EAF3EF; font-size:15px; margin-bottom:14px; }
+  .footer-inner p, .footer-inner a{ font-size:13.5px; color:#AFCBBE; line-height:1.9; }
+  .footer-bottom{
+    max-width:1180px; margin:36px auto 0; padding-top:22px; border-top:1px solid rgba(255,255,255,0.12);
+    font-family:var(--font-mono); font-size:12px; color:#8FB3A2; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+
+  /* ---------- TO TOP ---------- */
+  #toTop{
+    position:fixed; right:22px; bottom:22px; width:46px; height:46px; border-radius:50%;
+    background:var(--door-green-dark); color:#EAF3EF; box-shadow:var(--shadow-lift);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; visibility:hidden; transform:translateY(10px);
+    transition:.25s ease; z-index:900;
+  }
+  #toTop.show{ opacity:1; visibility:visible; transform:none; }
+
+  /* ---------- LIGHTBOX ---------- */
+  .lightbox{
+    position:fixed; inset:0; background:rgba(15,26,22,0.92); z-index:2000;
+    display:flex; align-items:center; justify-content:center; padding:40px;
+    opacity:0; visibility:hidden; transition:.25s ease;
+  }
+  .lightbox.open{ opacity:1; visibility:visible; }
+  .lightbox-inner{ max-width:720px; width:100%; text-align:center; }
+  .lightbox-inner .gsvg{ border-radius:14px; overflow:hidden; box-shadow:0 20px 60px rgba(0,0,0,0.5); }
+  .lightbox-cap{ color:#EAF3EF; font-family:var(--font-head); margin-top:16px; font-size:15px; }
+  .lightbox-close, .lightbox-prev, .lightbox-next{
+    position:absolute; color:#EAF3EF; font-size:26px; width:46px; height:46px;
+    display:flex; align-items:center; justify-content:center; border-radius:50%;
+    background:rgba(255,255,255,0.08);
+  }
+  .lightbox-close{ top:24px; right:24px; }
+  .lightbox-prev{ left:24px; top:50%; transform:translateY(-50%); }
+  .lightbox-next{ right:24px; top:50%; transform:translateY(-50%); }
+  .lightbox-close:hover, .lightbox-prev:hover, .lightbox-next:hover{ background:rgba(255,255,255,0.18); }
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width:960px){
+    .hero-grid{ grid-template-columns:1fr; }
+    .facts-card{ grid-template-columns:repeat(3,1fr); }
+    .info-grid{ grid-template-columns:1fr 1fr; }
+    .readiness-card{ grid-column:span 2; }
+    .gallery-grid{ grid-template-columns:1fr 1fr; }
+    .mgmt-grid{ grid-template-columns:1fr 1fr; }
+    .phones-grid{ grid-template-columns:1fr 1fr; }
+    .map-wrap{ grid-template-columns:1fr; }
+    .infra-grid{ grid-template-columns:1fr; }
+  }
+  @media (max-width:680px){
+    section{ padding:64px 18px; }
+    nav ul{
+      position:fixed; top:64px; left:0; right:0; background:var(--surface);
+      flex-direction:column; padding:18px 24px; gap:4px;
+      box-shadow:var(--shadow-lift);
+      transform:translateY(-130%); opacity:0; transition:.25s ease; z-index:-1;
+    }
+    nav ul.open{ transform:translateY(0); opacity:1; z-index:10; }
+    nav li{ border-bottom:1px solid var(--line); }
+    nav a{ display:block; padding:12px 0; }
+    .burger{ display:flex; }
+    .facts-card{ grid-template-columns:repeat(2,1fr); }
+    .info-grid{ grid-template-columns:1fr; }
+    .readiness-card{ grid-column:span 1; flex-direction:column; align-items:flex-start; }
+    .gallery-grid{ grid-template-columns:1fr 1fr; }
+    .mgmt-grid{ grid-template-columns:1fr; }
+    .phones-grid{ grid-template-columns:1fr 1fr; }
+    .news-item{ grid-template-columns:1fr; gap:6px; }
+    .news-line{ display:none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-wrap">
+    <div class="brand"><span class="brand-mark">56/2</span><span id="navAddressShort">ул. Бухар Жырау, 56/2</span></div>
+    <nav>
+      <ul id="navList">
+        <li><a href="#hero">Главное</a></li>
+        <li><a href="#info">Дом</a></li>
+        <li><a href="#gallery">Галерея</a></li>
+        <li><a href="#infra">Инфраструктура</a></li>
+        <li><a href="#docs">Документы</a></li>
+        <li><a href="#mgmt">Управление</a></li>
+        <li><a href="#phones">Телефоны</a></li>
+        <li><a href="#news">Новости</a></li>
+        <li><a href="#map">Карта</a></li>
+      </ul>
+    </nav>
+    <button class="burger" id="burgerBtn" aria-label="Меню"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<section class="hero" id="hero" style="padding-top:0; max-width:none;">
+  <div style="max-width:1180px; margin:0 auto; padding:0 24px;">
+    <div class="hero-grid">
+      <div class="hero-copy">
+        <div class="eyebrow">Информационный портал дома</div>
+        <h1>Всё о доме — за одну минуту</h1>
+        <p>Адрес, контакты председателя и доверенного лица, статус готовности к отопительному сезону, документы и инфраструктура рядом — в одном месте для жильцов, управляющей компании и проверяющих организаций.</p>
+        <div class="hero-actions">
+          <a href="#docs" class="btn btn-primary">Открыть документы</a>
+          <a href="#mgmt" class="btn btn-ghost">Контакты управления</a>
+        </div>
+      </div>
+      <div class="plate-wrap">
+        <div class="nameplate">
+          <div class="plate-eyebrow">Адрес дома</div>
+          <div class="plate-address" id="plateAddress">—</div>
+          <div class="plate-divider"></div>
+          <div class="plate-stats" id="plateStats"></div>
+        </div>
+        <svg class="stamp" viewBox="0 0 120 120" id="stampSvg"></svg>
+      </div>
+    </div>
+
+    <div class="facts-panel">
+      <div class="facts-card" id="factsCard"></div>
+    </div>
+  </div>
+</section>
+
+<div style="height:60px"></div>
+
+<section id="info">
+  <div class="eyebrow reveal">Основная информация</div>
+  <h2 class="reveal">Паспорт дома</h2>
+  <p class="section-sub reveal">Ключевые сведения о доме, зафиксированные управляющей компанией.</p>
+  <div class="info-grid" id="infoGrid"></div>
+</section>
+
+<section id="gallery">
+  <div class="eyebrow reveal">Галерея</div>
+  <h2 class="reveal">Двор и дом в кадре</h2>
+  <p class="section-sub reveal">Фасад, подъезды, детская площадка и придомовая территория.</p>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<section id="infra">
+  <div class="eyebrow reveal">Инфраструктура</div>
+  <h2 class="reveal">Что рядом</h2>
+  <p class="section-sub reveal">Объекты в шаговой доступности от дома.</p>
+  <div class="infra-grid" id="infraGrid"></div>
+</section>
+
+<section id="docs">
+  <div class="eyebrow reveal">Документы</div>
+  <h2 class="reveal">Документы дома</h2>
+  <p class="section-sub reveal">Акты, протоколы и отчёты — доступны для жильцов и проверяющих организаций.</p>
+  <div class="doc-list" id="docList"></div>
+</section>
+
+<section id="mgmt">
+  <div class="eyebrow reveal">Домовое управление</div>
+  <h2 class="reveal">Кто отвечает за дом</h2>
+  <p class="section-sub reveal">Председатель, доверенное лицо и управляющая компания.</p>
+  <div class="mgmt-grid" id="mgmtGrid"></div>
+</section>
+
+<section id="phones">
+  <div class="eyebrow reveal">Полезные телефоны</div>
+  <h2 class="reveal">Экстренная и коммунальная связь</h2>
+  <p class="section-sub reveal">Нажмите на номер, чтобы позвонить.</p>
+  <div class="phones-grid" id="phonesGrid"></div>
+</section>
+
+<section id="news">
+  <div class="eyebrow reveal">Новости</div>
+  <h2 class="reveal">Что происходит в доме</h2>
+  <p class="section-sub reveal">Последние объявления и события.</p>
+  <div class="news-list" id="newsList"></div>
+</section>
+
+<section id="map">
+  <div class="eyebrow reveal">Карта</div>
+  <h2 class="reveal">Расположение дома</h2>
+  <p class="section-sub reveal">Схема двора, подъездов и ближайшей инфраструктуры.</p>
+  <div class="map-wrap">
+    <div class="map-svg-wrap">
+      <svg viewBox="0 0 480 320" width="100%" id="mapSvg"></svg>
+    </div>
+    <div class="map-legend" id="mapLegend"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4 id="footAddress">—</h4>
+      <p>Официальный информационный портал многоквартирного дома. Данные предоставлены управляющей компанией и председателем дома.</p>
+    </div>
+    <div>
+      <h4>Разделы</h4>
+      <p><a href="#docs">Документы</a><br><a href="#mgmt">Управление</a><br><a href="#phones">Телефоны</a></p>
+    </div>
+    <div>
+      <h4>Контакты</h4>
+      <p id="footContacts"></p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Информационный портал дома</span>
+    <span>Версия портала 1.0</span>
+  </div>
+</footer>
+
+<button id="toTop" aria-label="Наверх">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 19V5M5 12l7-7 7 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+</button>
+
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lbClose">✕</button>
+  <button class="lightbox-prev" id="lbPrev">‹</button>
+  <button class="lightbox-next" id="lbNext">›</button>
+  <div class="lightbox-inner">
+    <div class="gsvg" id="lbImage" style="width:100%; aspect-ratio:4/3;"></div>
+    <div class="lightbox-cap" id="lbCaption"></div>
+  </div>
+</div>
+
+<script>
+/* =====================================================
+   ДАННЫЕ ДОМА — единственный источник контента страницы
+   ===================================================== */
+const houseData = {
+  address: "г. Караганда, ул. Бухар Жырау, 56/2",
+  apartments: 8,
+  entrances: 1,
+  floors: 5,
+  yearBuilt: 1970,
+  heatingReadiness: {
+    ready: true,
+    date: "20.09.2025",
+    actNumber: "№ 47-ОС/2025"
+  },
+  chairman: {
+    name: "Артыкбаев Асхат",
+    phone: "+7 701 234 56 78",
+    email: "chairman@dom56-buharzhyrau.kz",
+    hours: "Пн–Пт, 18:00–20:00"
+  },
+  representative: {
+    name: "Артыкбаев Асхат",
+    phone: "+7 701 234 56 78",
+    email: "chairman@dom56-buharzhyrau.kz",
+    hours: "также является председателем дома"
+  },
+  managingCompany: {
+    name: "Непосредственное (совместное) управление домом",
+    isDirect: true,
+    note: "Управляющая компания не привлекается — все решения по дому собственники квартир принимают самостоятельно, на общем собрании.",
+    hours: "Общее собрание собственников — по мере необходимости"
+  },
+  documents: [
+    { title: "Акт готовности к отопительному сезону 2025/2026", type: "Акт", date: "20.09.2025", url: "#" },
+    { title: "Протокол общего собрания собственников №3", type: "Протокол", date: "14.06.2025", url: "#" },
+    { title: "Отчёт о расходах на содержание дома за 2024 год", type: "Отчёт", date: "28.02.2025", url: "#" },
+    { title: "Протокол о выборе формы непосредственного управления", type: "Протокол", date: "01.03.2022", url: "#" },
+    { title: "План текущего ремонта на 2026 год", type: "План", date: "10.11.2025", url: "#" }
+  ],
+  news: [
+    { date: "02.07.2026", title: "Проведена промывка системы отопления", text: "По заказу председателя дома подрядная организация завершила гидравлические испытания и промывку внутридомовой системы отопления перед отопительным сезоном." },
+    { date: "18.06.2026", title: "Собрание собственников состоится 25 июня", text: "На повестке — отчёт председателя за полугодие и вопрос благоустройства детской площадки." },
+    { date: "03.06.2026", title: "Обновлена разметка парковки во дворе", text: "Нанесена новая разметка парковочных мест, включая два места для маломобильных жильцов." },
+    { date: "20.05.2026", title: "Завершён ремонт кровли", text: "Устранена протечка над подъездом, гарантийный срок на работы — 5 лет." }
+  ],
+  infrastructure: [
+    { name: "Торговый дом «Абзал»", category: "Магазины", distance: "150 м" },
+    { name: "ЦУМ", category: "Магазины", distance: "300 м" },
+    { name: "Кофейня «Зебра»", category: "Отдых", distance: "120 м" },
+    { name: "Каспий Банк", category: "Услуги", distance: "250 м" }
+  ],
+  gallery: [
+    { caption: "Фасад дома", colorA: "#2F5D50", colorB: "#1C332C", icon: "building" },
+    { caption: "Двор", colorA: "#4C7C6C", colorB: "#2F5D50", icon: "tree" },
+    { caption: "Детская площадка", colorA: "#1D4E63", colorB: "#123544", icon: "swing" },
+    { caption: "Парковка", colorA: "#5C6B67", colorB: "#33403C", icon: "car" },
+    { caption: "Подъезд №1", colorA: "#A6392C", colorB: "#6E2119", icon: "door" },
+    { caption: "Спортплощадка", colorA: "#3C7A66", colorB: "#1C4A3C", icon: "ball" }
+  ]
+};
+
+/* =====================================================
+   ИКОНКИ (простые inline SVG-пути)
+   ===================================================== */
+const icons = {
+  building: '<path d="M6 21V5a1 1 0 011-1h10a1 1 0 011 1v16M6 21h12M9 8h1M9 11h1M9 14h1M14 8h1M14 11h1M14 14h1M10 21v-4h4v4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
+  school: '<path d="M12 3l9 4.5-9 4.5-9-4.5L12 3zM5 10.5v5c0 1.5 3 3 7 3s7-1.5 7-3v-5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  medical: '<path d="M12 4v16M4 12h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>',
+  shop: '<path d="M4 8l1.5-4h13L20 8M4 8h16M4 8v11a1 1 0 001 1h14a1 1 0 001-1V8M9 12a3 3 0 006 0" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  transport: '<path d="M4 16V8a2 2 0 012-2h12a2 2 0 012 2v8M4 16a2 2 0 002 2h12a2 2 0 002-2M4 16h16M7 20v-2M17 20v-2" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
+  rest: '<path d="M12 3v9M8 8c0 2 2 4 4 4s4-2 4-4M6 21c1-5 3-7 6-7s5 2 6 7" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>',
+  bank: '<path d="M4 10l8-5 8 5M5 10v9M19 10v9M9 10v9M15 10v9M3 19h18" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round"/>',
+  doc: '<path d="M7 3h7l4 4v14a1 1 0 01-1 1H7a1 1 0 01-1-1V4a1 1 0 011-1zM14 3v4h4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>'
+};
+function iconFor(category){
+  const map = { "Образование":"school", "Медицина":"medical", "Магазины":"shop", "Транспорт":"transport", "Отдых":"rest", "Услуги":"bank" };
+  return icons[map[category]] || icons.building;
+}
+
+/* =====================================================
+   РЕНДЕР: HERO / NAMEPLATE
+   ===================================================== */
+function plural(n, one, few, many){
+  const n100 = Math.abs(n) % 100;
+  const n10 = n100 % 10;
+  if(n100 > 10 && n100 < 20) return many;
+  if(n10 > 1 && n10 < 5) return few;
+  if(n10 === 1) return one;
+  return many;
+}
+
+document.getElementById('plateAddress').textContent = houseData.address.split(', ').slice(1).join(', ') || houseData.address;
+document.getElementById('navAddressShort').textContent = houseData.address.split(', ').slice(-1)[0];
+document.getElementById('footAddress').textContent = houseData.address;
+
+document.getElementById('plateStats').innerHTML = `
+  <div class="plate-stat"><b>${houseData.apartments}</b><span>Квартир</span></div>
+  <div class="plate-stat"><b>${houseData.entrances}</b><span>${plural(houseData.entrances,'Подъезд','Подъезда','Подъездов')}</span></div>
+  <div class="plate-stat"><b>${houseData.floors}</b><span>${plural(houseData.floors,'Этаж','Этажа','Этажей')}</span></div>
+`;
+
+document.getElementById('factsCard').innerHTML = `
+  <div class="btn-tile"><div class="icon-num">${houseData.apartments}</div><label>Квартир</label></div>
+  <div class="btn-tile"><div class="icon-num">${houseData.entrances}</div><label>${plural(houseData.entrances,'Подъезд','Подъезда','Подъездов')}</label></div>
+  <div class="btn-tile"><div class="icon-num">${houseData.floors}</div><label>${plural(houseData.floors,'Этаж','Этажа','Этажей')}</label></div>
+  <div class="btn-tile"><div class="icon-num">${houseData.yearBuilt}</div><label>Год постройки</label></div>
+  <div class="btn-tile"><div class="icon-num">${houseData.heatingReadiness.ready ? '✓' : '—'}</div><label>Готов к сезону</label></div>
+`;
+
+/* Stamp SVG (circular text) for heating readiness */
+const stampText = houseData.heatingReadiness.ready ? "ГОТОВ К ОТОПИТЕЛЬНОМУ СЕЗОНУ • " : "ОЖИДАЕТ ПРОВЕРКИ • ";
+document.getElementById('stampSvg').innerHTML = `
+  <defs><path id="stampCircle" d="M 10,60 A 50,50 0 1,1 110,60 A 50,50 0 1,1 10,60" /></defs>
+  <circle cx="60" cy="60" r="52" fill="#F4F6F4" stroke="#A6392C" stroke-width="2.5"/>
+  <circle cx="60" cy="60" r="43" fill="none" stroke="#A6392C" stroke-width="1"/>
+  <text font-family="ui-monospace, monospace" font-size="7.6" letter-spacing="1" fill="#A6392C" font-weight="700">
+    <textPath href="#stampCircle" startOffset="0">${stampText.repeat(2)}</textPath>
+  </text>
+  <path d="M42 60l12 12 24-26" stroke="#A6392C" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+`;
+
+/* =====================================================
+   РЕНДЕР: ОСНОВНАЯ ИНФОРМАЦИЯ
+   ===================================================== */
+document.getElementById('infoGrid').innerHTML = `
+  <div class="card"><h3>Адрес</h3><div class="big" style="font-size:18px">${houseData.address}</div><p>Год постройки — ${houseData.yearBuilt}</p></div>
+  <div class="card"><h3>Квартиры</h3><div class="big">${houseData.apartments}</div><p>${houseData.entrances} ${plural(houseData.entrances,'подъезд','подъезда','подъездов')}, ${houseData.floors} ${plural(houseData.floors,'этаж','этажа','этажей')}</p></div>
+  <div class="card"><h3>Форма управления</h3><p style="color:var(--ink); font-weight:700; margin-bottom:4px;">${houseData.managingCompany.name}</p><p>${houseData.managingCompany.hours}</p></div>
+  <div class="card readiness-card">
+    <div class="readiness-badge">${houseData.heatingReadiness.ready ? '✓' : '!'}</div>
+    <div class="readiness-text">
+      <h3 style="margin-bottom:6px;">Готовность к отопительному сезону</h3>
+      <p>Акт готовности <b>${houseData.heatingReadiness.actNumber}</b> подписан <b>${houseData.heatingReadiness.date}</b>. Дом ${houseData.heatingReadiness.ready ? 'признан готовым' : 'ожидает признания готовым'} к отопительному сезону.</p>
+    </div>
+  </div>
+`;
+
+/* =====================================================
+   РЕНДЕР: ГАЛЕРЕЯ + LIGHTBOX
+   ===================================================== */
+function gallerySvg(item, big){
+  const s = big ? 400 : 220;
+  return `<svg viewBox="0 0 300 225" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <linearGradient id="g${item.caption.replace(/\s/g,'')}${big?'b':''}" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="${item.colorA}"/><stop offset="1" stop-color="${item.colorB}"/>
+      </linearGradient>
+    </defs>
+    <rect width="300" height="225" fill="url(#g${item.caption.replace(/\s/g,'')}${big?'b':''})"/>
+    <g transform="translate(120,72)" stroke="#F4F6F4" stroke-width="2.6" fill="none" opacity="0.85">${icons[item.icon] ? icons[item.icon].replace(/currentColor/g,'#F4F6F4') : ''}</g>
+  </svg>`;
+}
+const galleryGrid = document.getElementById('galleryGrid');
+houseData.gallery.forEach((item, i) => {
+  const el = document.createElement('div');
+  el.className = 'gallery-item reveal';
+  el.innerHTML = `<div class="gsvg">${gallerySvg(item)}</div><div class="gcap">${item.caption}</div>`;
+  el.addEventListener('click', () => openLightbox(i));
+  galleryGrid.appendChild(el);
+});
+
+let lbIndex = 0;
+const lightbox = document.getElementById('lightbox');
+function openLightbox(i){
+  lbIndex = i;
+  renderLightbox();
+  lightbox.classList.add('open');
+}
+function renderLightbox(){
+  const item = houseData.gallery[lbIndex];
+  document.getElementById('lbImage').innerHTML = gallerySvg(item, true);
+  document.getElementById('lbCaption').textContent = item.caption + ` — ${lbIndex+1} / ${houseData.gallery.length}`;
+}
+document.getElementById('lbClose').addEventListener('click', () => lightbox.classList.remove('open'));
+document.getElementById('lbPrev').addEventListener('click', () => { lbIndex = (lbIndex - 1 + houseData.gallery.length) % houseData.gallery.length; renderLightbox(); });
+document.getElementById('lbNext').addEventListener('click', () => { lbIndex = (lbIndex + 1) % houseData.gallery.length; renderLightbox(); });
+lightbox.addEventListener('click', (e) => { if(e.target === lightbox) lightbox.classList.remove('open'); });
+document.addEventListener('keydown', (e) => {
+  if(!lightbox.classList.contains('open')) return;
+  if(e.key === 'Escape') lightbox.classList.remove('open');
+  if(e.key === 'ArrowLeft') document.getElementById('lbPrev').click();
+  if(e.key === 'ArrowRight') document.getElementById('lbNext').click();
+});
+
+/* =====================================================
+   РЕНДЕР: ИНФРАСТРУКТУРА
+   ===================================================== */
+document.getElementById('infraGrid').innerHTML = houseData.infrastructure.map(it => `
+  <div class="infra-item reveal">
+    <div class="infra-icon"><svg width="20" height="20" viewBox="0 0 24 24">${iconFor(it.category)}</svg></div>
+    <div><h4>${it.name}</h4><span>${it.category} · ${it.distance}</span></div>
+  </div>
+`).join('');
+
+/* =====================================================
+   РЕНДЕР: ДОКУМЕНТЫ
+   ===================================================== */
+document.getElementById('docList').innerHTML = houseData.documents.map(d => `
+  <div class="doc-item reveal">
+    <div class="doc-left">
+      <div class="doc-icon"><svg width="18" height="18" viewBox="0 0 24 24">${icons.doc}</svg></div>
+      <div><div class="doc-title">${d.title}</div><div class="doc-meta">${d.date}</div></div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px;">
+      <span class="doc-tag">${d.type}</span>
+      <a class="doc-link" href="${d.url}">Открыть →</a>
+    </div>
+  </div>
+`).join('');
+
+/* =====================================================
+   РЕНДЕР: ДОМОВОЕ УПРАВЛЕНИЕ
+   ===================================================== */
+function initials(name){ return name.split(' ').slice(0,2).map(w=>w[0]).join(''); }
+document.getElementById('mgmtGrid').innerHTML = `
+  <div class="mgmt-card reveal">
+    <div class="avatar">${initials(houseData.chairman.name)}</div>
+    <span class="mgmt-role">Председатель дома</span>
+    <h3>${houseData.chairman.name}</h3>
+    <div class="mgmt-row">Телефон: <b><a href="tel:${houseData.chairman.phone.replace(/\s/g,'')}">${houseData.chairman.phone}</a></b></div>
+    <div class="mgmt-row">Email: <b>${houseData.chairman.email}</b></div>
+    <div class="mgmt-row">Приём: <b>${houseData.chairman.hours}</b></div>
+  </div>
+  <div class="mgmt-card reveal">
+    <div class="avatar">${initials(houseData.representative.name)}</div>
+    <span class="mgmt-role">Доверенное лицо</span>
+    <h3>${houseData.representative.name}</h3>
+    <div class="mgmt-row">Телефон: <b><a href="tel:${houseData.representative.phone.replace(/\s/g,'')}">${houseData.representative.phone}</a></b></div>
+    <div class="mgmt-row">Email: <b>${houseData.representative.email}</b></div>
+    <div class="mgmt-row">Приём: <b>${houseData.representative.hours}</b></div>
+  </div>
+  <div class="mgmt-card reveal">
+    <div class="avatar">НС</div>
+    <span class="mgmt-role">Форма управления домом</span>
+    <h3>${houseData.managingCompany.name}</h3>
+    <div class="mgmt-row">${houseData.managingCompany.note}</div>
+    <div class="mgmt-row">Собрания: <b>${houseData.managingCompany.hours}</b></div>
+  </div>
+`;
+
+/* =====================================================
+   РЕНДЕР: ТЕЛЕФОНЫ
+   ===================================================== */
+const phoneList = [
+  { label: "Председатель / доверенное лицо", num: houseData.chairman.phone, urgent:false },
+  { label: "Полиция", num: "102", urgent:true },
+  { label: "Скорая помощь", num: "103", urgent:true },
+  { label: "Пожарная служба", num: "101", urgent:true },
+  { label: "Аварийная газовая служба", num: "104", urgent:false }
+];
+document.getElementById('phonesGrid').innerHTML = phoneList.map(p => `
+  <a class="phone-tile ${p.urgent ? 'urgent':''} reveal" href="tel:${p.num.replace(/[^\d+]/g,'')}">
+    <span class="plabel">${p.label}</span>
+    <span class="pnum">${p.num}</span>
+  </a>
+`).join('');
+
+/* =====================================================
+   РЕНДЕР: НОВОСТИ
+   ===================================================== */
+document.getElementById('newsList').innerHTML = houseData.news.map(n => `
+  <div class="news-item reveal">
+    <div class="news-date">${n.date}</div>
+    <div class="news-line"></div>
+    <div><h4>${n.title}</h4><p>${n.text}</p></div>
+  </div>
+`).join('');
+
+/* =====================================================
+   РЕНДЕР: КАРТА (схема двора, без внешних сервисов)
+   ===================================================== */
+document.getElementById('mapSvg').innerHTML = `
+  <rect width="480" height="320" fill="#EFF3F0"/>
+  <rect x="30" y="30" width="420" height="260" fill="none" stroke="#C7D4CD" stroke-width="1" stroke-dasharray="4 4"/>
+  <rect x="150" y="90" width="180" height="140" rx="6" fill="#2F5D50"/>
+  <text x="240" y="165" text-anchor="middle" fill="#EAF3EF" font-family="ui-monospace, monospace" font-size="13" font-weight="700">ДОМ №${houseData.address.split(', ').slice(-1)[0]}</text>
+  ${(() => {
+    const n = houseData.entrances;
+    const step = n > 1 ? 240 / n : 0;
+    const startX = n > 1 ? 240 - (step * (n - 1)) / 2 : 240;
+    return Array.from({length:n}, (_, i) => i+1).map((num,i) =>
+      `<circle cx="${startX + i*step}" cy="230" r="7" fill="#1D4E63"/><text x="${startX + i*step}" y="234" text-anchor="middle" font-size="8" fill="#fff" font-family="ui-monospace, monospace">${num}</text>`
+    ).join('');
+  })()}
+  ${(() => {
+    const spots = [
+      { x:60, y:60, w:70, h:30, tx:95, ty:79, fill:"#A6392C" },
+      { x:350, y:60, w:80, h:30, tx:390, ty:79, fill:"#4C7C6C" },
+      { x:50, y:245, w:80, h:26, tx:90, ty:262, fill:"#5C6B67" },
+      { x:360, y:245, w:70, h:26, tx:395, ty:262, fill:"#1D4E63" }
+    ];
+    return houseData.infrastructure.slice(0,4).map((it,i) => {
+      const s = spots[i];
+      return `<rect x="${s.x}" y="${s.y}" width="${s.w}" height="${s.h}" rx="4" fill="${s.fill}" opacity="0.88"/>
+      <text x="${s.tx}" y="${s.ty}" text-anchor="middle" font-size="7.5" fill="#fff" font-family="ui-monospace, monospace">${it.name.length > 14 ? it.name.slice(0,13)+'…' : it.name}</text>`;
+    }).join('');
+  })()}
+  <circle cx="240" cy="46" r="4" fill="#2F5D50"/><text x="240" y="30" text-anchor="middle" font-size="9" fill="#56655F" font-family="ui-monospace, monospace">${houseData.address.split(', ').slice(1,-1).join(', ')}</text>
+`;
+const legendColors = ["#A6392C","#4C7C6C","#5C6B67","#1D4E63"];
+document.getElementById('mapLegend').innerHTML = `
+  <div class="legend-row"><span class="legend-dot" style="background:#2F5D50"></span> Корпус дома, ${houseData.entrances} ${houseData.entrances === 1 ? 'подъезд' : 'подъезда'}</div>
+  ${houseData.infrastructure.slice(0,4).map((it,i) => `<div class="legend-row"><span class="legend-dot" style="background:${legendColors[i]}"></span> ${it.name} — ${it.distance}</div>`).join('')}
+  <a class="btn btn-primary" style="margin-top:8px; align-self:flex-start; color:#1E2B27;" target="_blank" rel="noopener"
+     href="https://yandex.ru/maps/?text=${encodeURIComponent(houseData.address)}">Открыть на карте →</a>
+`;
+
+/* =====================================================
+   FOOTER CONTACTS
+   ===================================================== */
+document.getElementById('footContacts').innerHTML = `
+  Председатель / доверенное лицо: ${houseData.chairman.phone}
+`;
+document.getElementById('year').textContent = new Date().getFullYear();
+
+/* =====================================================
+   UI: МЕНЮ, ПРОКРУТКА, АНИМАЦИИ
+   ===================================================== */
+const burger = document.getElementById('burgerBtn');
+const navList = document.getElementById('navList');
+burger.addEventListener('click', () => navList.classList.toggle('open'));
+navList.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navList.classList.remove('open')));
+
+const toTop = document.getElementById('toTop');
+window.addEventListener('scroll', () => {
+  toTop.classList.toggle('show', window.scrollY > 500);
+});
+toTop.addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target); } });
+}, { threshold:0.12 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+</body>
+</html>
